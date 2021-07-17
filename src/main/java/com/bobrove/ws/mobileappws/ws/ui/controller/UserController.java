@@ -27,8 +27,7 @@ public class UserController {
     }
 
     @PostMapping
-    public UserDetailsResponseModel createUser(@Valid @RequestBody
-                                                           UserDetailsRequestModel userDetails) {
+    public UserDetailsResponseModel createUser(@RequestBody @Valid UserDetailsRequestModel userDetails) {
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(userDetails, userDto);
 
@@ -39,9 +38,18 @@ public class UserController {
         return responseModel;
     }
 
-    @PutMapping
-    public String updateUser() {
-        return "updateUser() called";
+    // TODO: handle updating the email and the password differently
+    @PutMapping(path = "/{userId}")
+    public UserDetailsResponseModel updateUser(@PathVariable("userId") String userId,
+                             @RequestBody @Valid UserDetailsRequestModel userDetails) {
+        UserDto userDto = new UserDto();
+        BeanUtils.copyProperties(userDetails, userDto);
+
+        UserDto createdUser = userService.updateUserByUserId(userId, userDto);
+
+        UserDetailsResponseModel responseModel = new UserDetailsResponseModel();
+        BeanUtils.copyProperties(createdUser, responseModel);
+        return responseModel;
     }
 
     @DeleteMapping

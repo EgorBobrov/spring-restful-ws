@@ -2,6 +2,7 @@ package com.bobrove.ws.mobileappws.ws.ui.exception;
 
 import com.bobrove.ws.mobileappws.ws.ui.model.response.ErrorMessage;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,6 +37,13 @@ public class ErrorHandlingControllerAdvice {
                                 fieldError.getDefaultMessage()))
                         .collect(Collectors.toList()));
     }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ErrorResponse onUsernameNotFoundException(UsernameNotFoundException e) {
+        return new ValidationErrorResponse(String.format(ErrorMessage.NO_RECORD_FOUND.getErrorMessage(), e.getMessage()));
+    }
+
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
