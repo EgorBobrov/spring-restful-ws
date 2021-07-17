@@ -1,12 +1,25 @@
 package com.bobrove.ws.mobileappws.ws.ui.exception;
 
+import com.bobrove.ws.mobileappws.ws.ui.model.response.ErrorMessage;
+
 import java.util.List;
 
-public class ValidationErrorResponse {
+public class ValidationErrorResponse extends ErrorResponse {
 
     private final List<Violation> violations;
 
-    public ValidationErrorResponse(List<Violation> violations) {
+    public ValidationErrorResponse(String errorMessage) {
+        super(errorMessage);
+        violations = List.of();
+    }
+
+    public ValidationErrorResponse(ErrorMessage errorMessage, List<Violation> violations) {
+        super(errorMessage.getErrorMessage());
+        this.violations = violations;
+    }
+
+    public ValidationErrorResponse(String errorMessage, List<Violation> violations) {
+        super(errorMessage);
         this.violations = violations;
     }
 

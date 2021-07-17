@@ -1,7 +1,6 @@
 package com.bobrove.ws.mobileappws.ws.ui.controller;
 
 import com.bobrove.ws.mobileappws.ws.ui.model.request.UserDetailsRequestModel;
-import com.bobrove.ws.mobileappws.ws.ui.model.response.ErrorMessages;
 import com.bobrove.ws.mobileappws.ws.ui.model.response.UserDetailsResponseModel;
 import com.bobrove.ws.mobileappws.ws.service.UserService;
 import com.bobrove.ws.mobileappws.ws.shared.dto.UserDto;
