@@ -1,6 +1,9 @@
 package com.bobrove.ws.mobileappws.ws.ui.controller;
 
 import com.bobrove.ws.mobileappws.ws.ui.model.request.UserDetailsRequestModel;
+import com.bobrove.ws.mobileappws.ws.ui.model.response.OperationStatusModel;
+import com.bobrove.ws.mobileappws.ws.ui.model.response.OperationStatusModel.OperationName;
+import com.bobrove.ws.mobileappws.ws.ui.model.response.OperationStatusModel.OperationStatus;
 import com.bobrove.ws.mobileappws.ws.ui.model.response.UserDetailsResponseModel;
 import com.bobrove.ws.mobileappws.ws.service.UserService;
 import com.bobrove.ws.mobileappws.ws.shared.dto.UserDto;
@@ -52,8 +55,9 @@ public class UserController {
         return responseModel;
     }
 
-    @DeleteMapping
-    public String deleteUser() {
-        return "deleteUser() called";
+    @DeleteMapping(path = "/{userId}")
+    public OperationStatusModel deleteUser(@PathVariable("userId") String userId) {
+        userService.deleteUser(userId);
+        return new OperationStatusModel(OperationStatus.SUCCESS, OperationName.DELETE);
     }
 }
