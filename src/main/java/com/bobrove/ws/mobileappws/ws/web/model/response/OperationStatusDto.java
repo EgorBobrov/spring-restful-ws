@@ -1,11 +1,11 @@
-package com.bobrove.ws.mobileappws.ws.ui.model.response;
+package com.bobrove.ws.mobileappws.ws.web.model.response;
 
-public class OperationStatusModel {
+public class OperationStatusDto {
     private final OperationStatus operationStatus;
     private final OperationName operationName;
 
-    public OperationStatusModel(OperationStatus operationResult,
-                                OperationName operationName) {
+    public OperationStatusDto(OperationStatus operationResult,
+                              OperationName operationName) {
         this.operationStatus = operationResult;
         this.operationName = operationName;
     }

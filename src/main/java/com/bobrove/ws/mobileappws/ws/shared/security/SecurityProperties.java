@@ -1,4 +1,4 @@
-package com.bobrove.ws.mobileappws.ws.security;
+package com.bobrove.ws.mobileappws.ws.shared.security;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package com.bobrove.ws.mobileappws;
+package com.bobrove.ws.mobileappws.ws.shared;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

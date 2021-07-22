@@ -1,9 +1,9 @@
-package com.bobrove.ws.mobileappws.ws.security;
+package com.bobrove.ws.mobileappws.ws.shared.security;
 
-import com.bobrove.ws.mobileappws.SpringApplicationContextAccessor;
+import com.bobrove.ws.mobileappws.ws.shared.SpringApplicationContextAccessor;
 import com.bobrove.ws.mobileappws.ws.service.UserService;
-import com.bobrove.ws.mobileappws.ws.shared.dto.UserDto;
-import com.bobrove.ws.mobileappws.ws.ui.model.request.UserLoginRequestModel;
+import com.bobrove.ws.mobileappws.ws.service.model.User;
+import com.bobrove.ws.mobileappws.ws.web.model.request.UserLoginRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -11,7 +11,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -32,8 +31,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
         try {
-            UserLoginRequestModel enteredCreds = new ObjectMapper()
-                    .readValue(request.getInputStream(), UserLoginRequestModel.class);
+            UserLoginRequestDto enteredCreds = new ObjectMapper()
+                    .readValue(request.getInputStream(), UserLoginRequestDto.class);
 
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     enteredCreds.getEmail(), enteredCreds.getPassword(), List.of()
@@ -48,14 +47,14 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) {
-        String username = ((User) authResult.getPrincipal()).getUsername();
+        String username = ((org.springframework.security.core.userdetails.User) authResult.getPrincipal()).getUsername();
         String token = Jwts.builder()
                 .setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.TOKEN_EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret())
                 .compact();
         UserService userService = SpringApplicationContextAccessor.getBean("userServiceImpl");
-        UserDto userByEmail = userService.getUserByEmail(username);
+        User userByEmail = userService.getUserByEmail(username);
         response.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
         response.addHeader("UserID", userByEmail.getUserId());
     }

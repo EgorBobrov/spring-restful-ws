@@ -1,6 +1,6 @@
-package com.bobrove.ws.mobileappws.ws.ui.exception;
+package com.bobrove.ws.mobileappws.ws.web.exception;
 
-import com.bobrove.ws.mobileappws.ws.ui.model.response.ErrorMessage;
+import com.bobrove.ws.mobileappws.ws.web.model.response.ErrorMessage;
 
 public class ErrorResponse {
     private final String errorMessage;

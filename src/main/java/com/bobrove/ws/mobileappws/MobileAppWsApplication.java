@@ -1,5 +1,7 @@
 package com.bobrove.ws.mobileappws;
 
+import com.bobrove.ws.mobileappws.ws.shared.SpringApplicationContextAccessor;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +22,11 @@ public class MobileAppWsApplication {
 	@Bean
 	public SpringApplicationContextAccessor springApplicationContextAccessor() {
 		return new SpringApplicationContextAccessor();
+	}
+
+	@Bean
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
 	}
 
 }

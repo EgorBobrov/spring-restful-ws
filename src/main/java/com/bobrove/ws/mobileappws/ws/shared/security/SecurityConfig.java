@@ -1,4 +1,4 @@
-package com.bobrove.ws.mobileappws.ws.security;
+package com.bobrove.ws.mobileappws.ws.shared.security;
 
 import com.bobrove.ws.mobileappws.ws.service.UserService;
 import org.springframework.http.HttpMethod;
@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import static com.bobrove.ws.mobileappws.ws.security.SecurityConstants.SIGN_UP_URL;
+import static com.bobrove.ws.mobileappws.ws.shared.security.SecurityConstants.SIGN_UP_URL;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {

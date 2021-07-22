@@ -1,7 +1,15 @@
-package com.bobrove.ws.mobileappws.ws.ui.model.request;
+package com.bobrove.ws.mobileappws.ws.web.model.request;
 
-public class UserLoginRequestModel {
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+public class UserDetailsRequestDto extends BaseUserRequestDto {
+
+    @NotNull
+    @NotEmpty
     private String email;
+    @NotNull
+    @NotEmpty
     private String password;
 
     public String getEmail() {

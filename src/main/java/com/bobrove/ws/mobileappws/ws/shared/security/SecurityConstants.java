@@ -1,6 +1,6 @@
-package com.bobrove.ws.mobileappws.ws.security;
+package com.bobrove.ws.mobileappws.ws.shared.security;
 
-import com.bobrove.ws.mobileappws.SpringApplicationContextAccessor;
+import com.bobrove.ws.mobileappws.ws.shared.SpringApplicationContextAccessor;
 
 public final class SecurityConstants {
     private SecurityConstants() {}

@@ -1,22 +1,18 @@
-package com.bobrove.ws.mobileappws.ws.ui.model.request;
+package com.bobrove.ws.mobileappws.ws.web.model.response;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
-public class UserDetailsRequestModel {
-
-    @NotNull
-    @NotEmpty
+public class UserResponseDto {
+    private String userId; // public User ID
     private String firstName;
-    @NotNull
-    @NotEmpty
     private String lastName;
-    @NotNull
-    @NotEmpty
     private String email;
-    @NotNull
-    @NotEmpty
-    private String password;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getFirstName() {
         return firstName;
@@ -40,13 +36,5 @@ public class UserDetailsRequestModel {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

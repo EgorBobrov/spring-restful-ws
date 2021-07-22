@@ -1,8 +1,8 @@
-package com.bobrove.ws.mobileappws.ws.shared.dto;
+package com.bobrove.ws.mobileappws.ws.service.model;
 
 import java.io.Serializable;
 
-public class UserDto implements Serializable {
+public class User implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private long id; // database ID

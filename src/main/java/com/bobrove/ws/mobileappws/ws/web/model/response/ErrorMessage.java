@@ -1,4 +1,4 @@
-package com.bobrove.ws.mobileappws.ws.ui.model.response;
+package com.bobrove.ws.mobileappws.ws.web.model.response;
 
 public enum ErrorMessage {
     WRONG_FIELD_VALUE("Value of a field violates a constraint"),

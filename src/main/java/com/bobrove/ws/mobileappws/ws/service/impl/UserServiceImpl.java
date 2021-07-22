@@ -4,10 +4,12 @@ import com.bobrove.ws.mobileappws.ws.data.entity.UserEntity;
 import com.bobrove.ws.mobileappws.ws.data.repository.UserRepository;
 import com.bobrove.ws.mobileappws.ws.service.UserService;
 import com.bobrove.ws.mobileappws.ws.shared.Utils;
-import com.bobrove.ws.mobileappws.ws.shared.dto.UserDto;
-import org.springframework.beans.BeanUtils;
+import com.bobrove.ws.mobileappws.ws.service.model.User;
+import com.bobrove.ws.mobileappws.ws.web.model.request.UserDetailsRequestDto;
+import com.bobrove.ws.mobileappws.ws.web.model.response.OperationStatusDto;
+import com.bobrove.ws.mobileappws.ws.web.model.response.UserResponseDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -22,50 +24,46 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
-    public UserDto createUser(UserDto userDto) {
-        UserEntity existingUserWithSameEmail = userRepository.findByEmail(userDto.getEmail());
+    public User createUser(User user) {
+        UserEntity existingUserWithSameEmail = userRepository.findByEmail(user.getEmail());
         if (existingUserWithSameEmail != null) {
-            throw new RuntimeException(String.format("User with email %s already exists.", userDto.getEmail()));
+            throw new RuntimeException(String.format("User with email %s already exists.", user.getEmail()));
         }
 
-        UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(userDto, userEntity);
-        userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+        UserEntity userEntity = modelMapper.map(user, UserEntity.class);
+        userEntity.setEncryptedPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userEntity.setUserId(Utils.generateUserId());
 
         UserEntity savedEntity = userRepository.save(userEntity);
 
-        UserDto result = new UserDto();
-        BeanUtils.copyProperties(savedEntity, result);
-        return result;
+        return convertToModel(savedEntity);
     }
 
     @Override
-    public UserDto getUserByEmail(String email) {
+    public User getUserByEmail(String email) {
         UserEntity userEntity = userRepository.findByEmail(email);
         if (userEntity == null) {
             throw new UsernameNotFoundException(email);
         }
-        UserDto result = new UserDto();
-        BeanUtils.copyProperties(userEntity, result);
-        return result;
+        return convertToModel(userEntity);
     }
 
     @Override
-    public UserDto getUserByUserId(String userId) {
+    public User getUserByUserId(String userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
         if (userEntity == null) {
             throw new UsernameNotFoundException(userId);
         }
-        UserDto userDto = new UserDto();
-        BeanUtils.copyProperties(userEntity, userDto);
-        return userDto;
+
+        return convertToModel(userEntity);
     }
 
     @Override
-    public UserDto updateUserByUserId(String userId, UserDto dataToUpdateUser) {
+    public User updateUserByUserId(String userId, User dataToUpdateUser) {
         UserEntity currentUserData = userRepository.findByUserId(userId);
         if (currentUserData == null) {
             throw new UsernameNotFoundException(userId);
@@ -74,18 +72,18 @@ public class UserServiceImpl implements UserService {
         currentUserData.setLastName(dataToUpdateUser.getLastName());
         UserEntity updatedUser = userRepository.save(currentUserData);
 
-        UserDto result = new UserDto();
-        BeanUtils.copyProperties(updatedUser, result);
-        return result;
+        return convertToModel(updatedUser);
     }
 
     @Override
-    public void deleteUser(String userId) {
+    public OperationStatusDto deleteUser(String userId) {
         UserEntity existingUserData = userRepository.findByUserId(userId);
         if (existingUserData == null) {
             throw new UsernameNotFoundException(userId);
         }
         userRepository.delete(existingUserData);
+        return new OperationStatusDto(OperationStatusDto.OperationStatus.SUCCESS,
+                OperationStatusDto.OperationName.DELETE);
     }
 
     @Override
@@ -94,6 +92,12 @@ public class UserServiceImpl implements UserService {
         if (userEntity == null) {
             throw new UsernameNotFoundException(email);
         }
-        return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), List.of());
+        return new org.springframework.security.core.userdetails.User(userEntity.getEmail(),
+                userEntity.getEncryptedPassword(),
+                List.of());
+    }
+
+    private User convertToModel(UserEntity userEntity) {
+        return modelMapper.map(userEntity, User.class);
     }
 }

@@ -1,4 +1,4 @@
-package com.bobrove.ws.mobileappws.ws.security;
+package com.bobrove.ws.mobileappws.ws.shared.security;
 
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
