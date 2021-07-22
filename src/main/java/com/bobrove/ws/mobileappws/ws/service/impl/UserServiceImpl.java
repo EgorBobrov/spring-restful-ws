@@ -10,12 +10,15 @@ import com.bobrove.ws.mobileappws.ws.web.model.response.OperationStatusDto;
 import com.bobrove.ws.mobileappws.ws.web.model.response.UserResponseDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -60,6 +63,13 @@ public class UserServiceImpl implements UserService {
         }
 
         return convertToModel(userEntity);
+    }
+
+    @Override
+    public List<User> getUsers(int page, int limit) {
+        Pageable pageRequest = PageRequest.of(page, limit);
+        return userRepository.findAll(pageRequest).getContent()
+                .stream().map(this::convertToModel).collect(Collectors.toList());
     }
 
     @Override
